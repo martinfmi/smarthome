@@ -11,10 +11,8 @@ public class Activator implements BundleActivator {
 
     @Override
     public void start(final BundleContext bundleContext) throws Exception {
-
         serviceRegistration = bundleContext.registerService(ItemProvider.class.getName(), new SimpleItemProvider(),
                 null);
-
     }
 
 

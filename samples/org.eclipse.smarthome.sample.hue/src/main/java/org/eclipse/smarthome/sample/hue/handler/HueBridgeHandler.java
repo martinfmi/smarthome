@@ -14,9 +14,17 @@ import org.eclipse.smarthome.core.thing.binding.ThingConfiguration;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.sample.hue.handler.HueBridgeHandler.HueBridgeConfiguration;
 
+/**
+ * {@link HueBridgeHandler} is the handler for a HUE bridge and connects it to
+ * the framework. All {@link HueLampHandler}s use the {@link HueBridgeHandler}
+ * to execute the actual commands.
+ * 
+ * @author Dennis Nobel - Initial contribution of sample
+ * 
+ */
 public class HueBridgeHandler extends BaseThingHandler<HueBridgeConfiguration> {
 
-    HttpClient httpClient;
+    private HttpClient httpClient;
 
     public HueBridgeHandler(HueBridgeConfiguration configuration) {
         super(configuration);
@@ -30,7 +38,7 @@ public class HueBridgeHandler extends BaseThingHandler<HueBridgeConfiguration> {
     }
 
     @Override
-    protected void initialize(Thing component, HueBridgeConfiguration configuration) {
+    protected void initialize(Thing thing, HueBridgeConfiguration configuration) {
         httpClient = new DefaultHttpClient();
     }
 

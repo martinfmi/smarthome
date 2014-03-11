@@ -12,7 +12,16 @@ import org.eclipse.smarthome.sample.hue.handler.HueLampHandler.HueLampConfigurat
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * {@link HueLampHandler} is the handler for a HUE lamp. It uses the
+ * {@link HueBridgeHandler} to execute the actual command.
+ * 
+ * @author Dennis Nobel - Initial contribution of sample
+ * 
+ */
 public class HueLampHandler extends BaseThingHandler<HueLampConfiguration> {
+
+    private static final String CHANNEL_ID_DIMMER = "dimmer";
 
     private Logger logger = LoggerFactory.getLogger(HueLampHandler.class.getName());
 
@@ -31,14 +40,16 @@ public class HueLampHandler extends BaseThingHandler<HueLampConfiguration> {
 
     @Override
     public void handleCommand(Channel channel, Command command) {
-        String id = channel.getId();
-        switch (id) {
-        case "dimmer":
-            HueBridgeHandler hueBridge = getHueBridgeHandler();
-            if (hueBridge == null) {
-                logger.warn("Cannot handle command without bridge.");
-                return;
-            }
+
+        HueBridgeHandler hueBridge = getHueBridgeHandler();
+        if (hueBridge == null) {
+            logger.warn("Cannot handle command without bridge.");
+            return;
+        }
+
+        switch (channel.getId()) {
+
+        case CHANNEL_ID_DIMMER:
             if ((command instanceof PercentType) && !(command instanceof HSBType)) {
                 PercentType percentType = (PercentType) command;
                 hueBridge.setLampBrightness(getConfiguration().lampId, percentType.intValue());
@@ -46,6 +57,7 @@ public class HueLampHandler extends BaseThingHandler<HueLampConfiguration> {
             break;
 
         default:
+            // command is sent to an unknown channel - nothing to do
             break;
         }
 

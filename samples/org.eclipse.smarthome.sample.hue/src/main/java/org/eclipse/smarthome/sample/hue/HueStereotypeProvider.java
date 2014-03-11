@@ -16,17 +16,17 @@ import org.eclipse.smarthome.sample.hue.handler.HueLampHandler.HueLampConfigurat
 
 import com.google.common.collect.Lists;
 
-public class HueComponentStereotypeProvider implements ComponentStereotypeProvider {
+public class HueStereotypeProvider {
 
     private static final String STEREO_TYPE_BRIDGE = "BRIDGE";
     private static final String STEREO_TYPE_LAMP = "LAMP";
 
-    @Override
+
     public Bridge createBridge(String stereoType) {
         return createHueBridge();
     }
 
-    @Override
+
     public Thing createThing(Bridge bridge, String stereoType) {
         switch (stereoType) {
         case STEREO_TYPE_LAMP:
@@ -36,12 +36,12 @@ public class HueComponentStereotypeProvider implements ComponentStereotypeProvid
         }
     }
 
-    @Override
+
     public List<String> getSupportedBridgeStereoTypes() {
         return Lists.newArrayList(STEREO_TYPE_BRIDGE);
     }
 
-    @Override
+
     public List<String> getSupportedThingStereoTypes() {
         return Lists.newArrayList(STEREO_TYPE_LAMP);
     }

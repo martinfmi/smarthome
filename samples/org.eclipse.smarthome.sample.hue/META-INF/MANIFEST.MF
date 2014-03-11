@@ -22,6 +22,6 @@ Import-Package: com.google.common.collect,
  org.osgi.service.component,
  org.osgi.util.tracker,
  org.slf4j
-Service-Component: OSGI-INF/HueBridgeFactory.xml,
- OSGI-INF/HueLampFactory.xml,
+Service-Component: OSGI-INF/HueBridgeHandlerFactory.xml,
+ OSGI-INF/HueLampHandlerFactory.xml,
 Bundle-Activator: org.eclipse.smarthome.sample.hue.Activator

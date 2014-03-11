@@ -9,9 +9,9 @@
     http://www.eclipse.org/legal/epl-v10.html
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.eclipse.smarthome.sample.hue.factory.HueBridgeFactory">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.eclipse.smarthome.sample.hue.factory.HueBridgeHandlerFactory">
 
-   <implementation class="org.eclipse.smarthome.sample.hue.factory.HueBridgeFactory"/>
+   <implementation class="org.eclipse.smarthome.sample.hue.factory.HueBridgeHandlerFactory"/>
 
    <service>
       <provide interface="org.osgi.service.cm.ManagedServiceFactory"/>

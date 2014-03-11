@@ -8,8 +8,15 @@ import org.eclipse.smarthome.sample.hue.handler.HueBridgeHandler;
 import org.eclipse.smarthome.sample.hue.handler.HueBridgeHandler.HueBridgeConfiguration;
 
 
-public class HueBridgeFactory extends BaseThingHandlerFactory<HueBridgeHandler, HueBridgeConfiguration> {
+/**
+ * {@link HueBridgeHandlerFactory} is a factory for {@link HueBridgeHandler}s.
+ * 
+ * @author Dennis Nobel - Initial contribution of sample
+ * 
+ */
+public class HueBridgeHandlerFactory extends BaseThingHandlerFactory<HueBridgeHandler, HueBridgeConfiguration> {
 
+    @Override
     protected HueBridgeHandler createThingHandler(HueBridgeConfiguration configuration) {
         return new HueBridgeHandler(configuration);
     }
