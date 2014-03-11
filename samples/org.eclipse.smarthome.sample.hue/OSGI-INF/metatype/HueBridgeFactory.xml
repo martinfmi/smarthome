@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaData xmlns="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD description="HUE Bridge" name="HUE Bridge" id="hue.bridge">
+		<AD name="Hue Bridge IP Address" id="ipAddress" required="false" type="String"
+			default="" />
+		<AD name="Hue Bridge ID" id="id" required="false" type="String"
+         default="" />
+		<AD name="App Secret" id="secret"
+			description="The application secret to use for the connection to the Hue Bridge"
+			type="String" default="openHABRuntime" />
+	</OCD>
+	<Designate factoryPid="hue.bridge">
+		<Object ocdref="hue.bridge" />
+	</Designate>
+</MetaData>
