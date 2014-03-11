@@ -2,6 +2,14 @@ package org.eclipse.smarthome.core.thing;
 
 import org.eclipse.smarthome.core.items.Item;
 
+/**
+ * {@link Channel} is a part of a {@link Thing} that represents a functionality
+ * of it. Therefore {@link Item}s can be bound a to a channel. The channel only
+ * accepts a specific item type which is specified by
+ * {@link Channel#getAcceptedItemType()} methods.
+ * 
+ * @author Dennis Nobel - Initial contribution and API
+ */
 public class Channel implements Identifiable {
 
     private Class<? extends Item> acceptedItemType;

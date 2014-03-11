@@ -15,9 +15,9 @@
   </properties>
 
   <groupId>org.eclipse.smarthome.core</groupId>
-  <artifactId>org.eclipse.smarthome.core</artifactId>
+  <artifactId>org.eclipse.smarthome.core.thing</artifactId>
 
-  <name>Eclipse SmartHome Core</name>
+  <name>Eclipse SmartHome Thing</name>
   <packaging>eclipse-plugin</packaging>
 
 </project>
