@@ -30,7 +30,7 @@ public class ThingRegistry {
         this.bundleContext = componentContext.getBundleContext();
         thingManager = new ThingManager(this.bundleContext);
         Dictionary<String, Object> properties = new Hashtable<>();
-        properties.put(EventConstants.EVENT_TOPIC, "smarthome/command/*");
+        properties.put(EventConstants.EVENT_TOPIC, "smarthome/*");
         thingManagerServiceRegistration = this.bundleContext.registerService(EventHandler.class.getName(),
                 this.thingManager, properties);
         addThingTracker(thingManager);
@@ -53,7 +53,9 @@ public class ThingRegistry {
         try {
             Configuration factoryConfiguration = configurationAdmin.createFactoryConfiguration(thing.getFactoryPid(),
                     null);
-            factoryConfiguration.update(configuration.toDictionary());
+            if (configuration != null) {
+                factoryConfiguration.update(configuration.toDictionary());
+            }
             ((ThingImpl) thing).setConfigurationPid(factoryConfiguration.getPid());
             ((ThingImpl) thing).setFactoryPid(factoryConfiguration.getFactoryPid());
             notifyListenersAboutAddedThing(thing);

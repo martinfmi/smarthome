@@ -9,6 +9,7 @@ import org.eclipse.smarthome.core.events.AbstractEventSubscriber;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTracker;
+import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
 import org.osgi.framework.BundleContext;
@@ -60,7 +61,10 @@ public class ThingManager extends AbstractEventSubscriber implements ThingTracke
             List<Channel> channels = thing.getChannels();
             for (Channel channel : channels) {
                 if (isItemBoundToChannel(itemName, channel)) {
-                    thing.getHandler().handleUpdate(channel, newState);
+                    ThingHandler<?> handler = thing.getHandler();
+                    if (handler != null) {
+                        handler.handleUpdate(channel, newState);
+                    }
                 }
             }
         }

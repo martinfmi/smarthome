@@ -80,6 +80,9 @@ public abstract class BaseThingHandlerFactory<H extends ThingHandler<C>, C exten
     }
 
     private ThingHandler<C> createThingHandler(String pid, Dictionary dictionary) {
+        if (dictionary == null) {
+            dictionary = new Hashtable<>();
+        }
         ThingHandler<C> thingHandler = createThingHandler(createConfiguration(dictionary));
         return thingHandler;
     }
