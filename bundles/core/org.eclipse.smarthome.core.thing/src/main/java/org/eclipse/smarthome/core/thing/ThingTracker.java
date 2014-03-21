@@ -6,10 +6,14 @@ package org.eclipse.smarthome.core.thing;
  */
 public interface ThingTracker {
 
-    void thingAdded(Thing thing);
+    public enum ThingTrackerEvent {
+        THING_ADDED, THING_REMOVED, TRACKER_ADDED, TRACKER_REMOVED
+    }
+
+    void thingAdded(Thing thing, ThingTrackerEvent thingTrackerEvent);
 
     void thingUpdated(Thing thing);
 
-    void thingRemoved(Thing thing);
+    void thingRemoved(Thing thing, ThingTrackerEvent thingTrackerEvent);
 
 }

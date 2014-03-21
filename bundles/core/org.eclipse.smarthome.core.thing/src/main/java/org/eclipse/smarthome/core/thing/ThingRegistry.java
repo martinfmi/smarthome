@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.eclipse.smarthome.core.thing.ThingTracker.ThingTrackerEvent;
 import org.eclipse.smarthome.core.thing.binding.ThingConfiguration;
 import org.eclipse.smarthome.core.thing.internal.ThingImpl;
 import org.eclipse.smarthome.core.thing.internal.ThingManager;
@@ -45,7 +46,9 @@ public class ThingRegistry {
     }
 
     protected void deactivate(ComponentContext componentContext) {
-        removeThingTracker(thingManager);
+        for (ThingTracker thingTracker : thingTrackers) {
+            removeThingTracker(thingTracker);
+        }
         thingManagerServiceRegistration.unregister();
     }
 
@@ -94,25 +97,25 @@ public class ThingRegistry {
 
     private void notifyListenersAboutAddedThing(Thing thing) {
         for (ThingTracker thingTracker : thingTrackers) {
-            thingTracker.thingAdded(thing);
+            thingTracker.thingAdded(thing, ThingTrackerEvent.THING_ADDED);
         }
     }
 
     private void notifyListenersAboutRemovedThing(Thing thing) {
         for (ThingTracker thingTracker : thingTrackers) {
-            thingTracker.thingRemoved(thing);
+            thingTracker.thingRemoved(thing, ThingTrackerEvent.THING_REMOVED);
         }
     }
 
     private void notifyListenerAboutAllThingsAdded(ThingTracker thingTracker) {
         for (Thing thing : this.things) {
-            thingTracker.thingAdded(thing);
+            thingTracker.thingAdded(thing, ThingTrackerEvent.TRACKER_ADDED);
         }
     }
 
     private void notifyListenerAboutAllThingsRemoved(ThingTracker thingTracker) {
         for (Thing thing : this.things) {
-            thingTracker.thingRemoved(thing);
+            thingTracker.thingRemoved(thing, ThingTrackerEvent.TRACKER_REMOVED);
         }
     }
 }
