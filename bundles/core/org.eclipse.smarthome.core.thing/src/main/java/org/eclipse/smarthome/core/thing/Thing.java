@@ -33,4 +33,6 @@ public interface Thing extends Identifiable {
 
     Bridge getBridge();
 
+    void setBridge(Bridge bridge);
+
 }

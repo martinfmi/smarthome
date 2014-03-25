@@ -47,6 +47,7 @@ public abstract class BaseThingHandlerFactory<H extends ThingHandler<C>, C exten
     public void updated(String pid, @SuppressWarnings("rawtypes") Dictionary dictionary) throws ConfigurationException {
         if (!thingHandlers.containsKey(pid)) {
             ThingHandler<C> thingHandler = createThingHandler(pid, dictionary);
+
             @SuppressWarnings("rawtypes")
             ServiceRegistration serviceRegistration = registerAsService(pid, thingHandler);
             thingHandlers.put(pid, serviceRegistration);

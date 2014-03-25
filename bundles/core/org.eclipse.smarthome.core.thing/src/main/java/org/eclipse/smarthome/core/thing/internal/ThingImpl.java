@@ -101,4 +101,9 @@ public class ThingImpl implements Thing {
         return this.bridge;
     }
 
+    @Override
+    public void setBridge(Bridge bridge) {
+        this.bridge = bridge;
+    }
+
 }

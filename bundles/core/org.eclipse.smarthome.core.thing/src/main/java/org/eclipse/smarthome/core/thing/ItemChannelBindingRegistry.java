@@ -20,9 +20,10 @@ public class ItemChannelBindingRegistry implements ThingTracker {
 
     public void bind(String itemName, Channel channel) {
         String boundItemName = getBoundItem(channel);
-        if (boundItemName != null && !boundItemName.equals(itemName)) {
-            throw new IllegalArgumentException("Channel is already bound to an item.");
-        }
+        // if (boundItemName != null && !boundItemName.equals(itemName)) {
+        // throw new
+        // IllegalArgumentException("Channel is already bound to an item.");
+        // }
         itemChannelBindings.put(itemName, channel);
     }
 

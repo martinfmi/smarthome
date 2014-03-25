@@ -35,4 +35,6 @@ public interface ThingHandler<C extends ThingConfiguration> {
     C getConfiguration();
 
     ThingHandler<?> getBridgeHandler();
+
+    void setBridgeHandler(ThingHandler<?> bridgeHandler);
 }
