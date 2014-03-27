@@ -34,7 +34,7 @@ public class ItemChannelBindingRegistry implements ThingTracker {
     public String getBoundItem(Channel channel) {
         Collection<Entry<String, Channel>> entries = itemChannelBindings.entries();
         for (Entry<String, Channel> entry : entries) {
-            if (channel.equals(channel)) {
+            if (entry.getValue().equals(channel)) {
                 return entry.getKey();
             }
         }
