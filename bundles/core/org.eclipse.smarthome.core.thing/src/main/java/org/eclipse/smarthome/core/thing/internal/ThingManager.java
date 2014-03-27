@@ -1,16 +1,18 @@
 package org.eclipse.smarthome.core.thing.internal;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.smarthome.core.events.AbstractEventSubscriber;
+import org.eclipse.smarthome.core.events.EventPublisher;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ItemChannelBindingRegistry;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTracker;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
+import org.eclipse.smarthome.core.thing.internal.ThingImpl.ChannelUpdateListener;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
 import org.osgi.framework.BundleContext;
@@ -19,8 +21,32 @@ import org.osgi.framework.ServiceReference;
 
 public class ThingManager extends AbstractEventSubscriber implements ThingTracker {
 
+    private final class DefaultChannelUpdateListener implements ChannelUpdateListener {
+
+        private Thing thing;
+
+        public DefaultChannelUpdateListener(Thing thing) {
+            this.thing = thing;
+        }
+
+        @Override
+        public void channelUpdated(String channelId, State state) {
+            List<Channel> channels = thing.getChannels();
+            for (Channel channel : channels) {
+                if(channel.getId().equals(channelId)) {
+                    ItemChannelBindingRegistry itemChannelBindingRegistry = getItemChannelBindingRegistry();
+                    String item = itemChannelBindingRegistry.getBoundItem(channel);
+                    EventPublisher eventPublisher = (EventPublisher) bundleContext.getService(bundleContext
+                            .getServiceReference(EventPublisher.class.getName()));
+                    eventPublisher.postUpdate(item, state);
+                }
+            }
+        }
+    }
+
     private BundleContext bundleContext;
-    private Map<Thing, ThingHandlerServiceTracker> thingHandlerTrackers = new HashMap<>();
+    private Map<Thing, ThingHandlerServiceTracker> thingHandlerTrackers = new ConcurrentHashMap<>();
+    private Map<Thing, ChannelUpdateListener> channelUpdateListeners = new ConcurrentHashMap<>();
 
     public ThingManager(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
@@ -29,6 +55,11 @@ public class ThingManager extends AbstractEventSubscriber implements ThingTracke
     @Override
     public void thingAdded(Thing thing, ThingTrackerEvent thingTrackerEvent) {
         try {
+
+            DefaultChannelUpdateListener channelUpdateListener = new DefaultChannelUpdateListener(thing);
+            channelUpdateListeners.put(thing, channelUpdateListener);
+            ((ThingImpl) thing).addChannelUpdateListener(channelUpdateListener);
+
             ThingHandlerServiceTracker thingHandlerTracker = new ThingHandlerServiceTracker(bundleContext, thing);
             thingHandlerTracker.open();
             thingHandlerTrackers.put(thing, thingHandlerTracker);
@@ -41,6 +72,10 @@ public class ThingManager extends AbstractEventSubscriber implements ThingTracke
     @Override
     public void thingRemoved(Thing thing, ThingTrackerEvent thingTrackerEvent) {
         thingHandlerTrackers.get(thing).close();
+        thingHandlerTrackers.remove(thing);
+        ChannelUpdateListener channelUpdateListener = channelUpdateListeners.get(thing);
+        ((ThingImpl) thing).removeChannelUpdateListener(channelUpdateListener);
+        channelUpdateListeners.remove(channelUpdateListener);
     }
 
     @Override

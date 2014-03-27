@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
+import org.eclipse.smarthome.core.types.State;
 
 /**
  * A {@link Thing} is a representation of a connected part (e.g. physical device
@@ -34,5 +35,7 @@ public interface Thing extends Identifiable {
     Bridge getBridge();
 
     void setBridge(Bridge bridge);
+
+    void channelUpdated(String channelId, State state);
 
 }

@@ -5,8 +5,8 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.State;
 
-public abstract class BaseThingHandler<T extends ThingConfiguration> implements ThingHandler<T> {
 
+public abstract class BaseThingHandler<T extends ThingConfiguration> implements ThingHandler<T> {
     private ThingHandler<?> bridgeHandler;
     private T configuration;
 
@@ -46,6 +46,18 @@ public abstract class BaseThingHandler<T extends ThingConfiguration> implements 
         }
     }
 
+    protected void updateStatus(ThingStatus status) {
+        if (thing != null && thing.getStatus() != status) {
+            thing.setStatus(status);
+        }
+    }
+
+    protected void updateState(String channelId, State state) {
+        if (thing != null) {
+            thing.channelUpdated(channelId, state);
+        }
+    }
+
     @Override
     public void updated(T configuration) {
         this.configuration = configuration;
@@ -55,8 +67,9 @@ public abstract class BaseThingHandler<T extends ThingConfiguration> implements 
 
     }
 
-    protected void setThingStatus(ThingStatus status) {
-        thing.setStatus(status);
+    protected void dispose() {
+
     }
+
 
 }

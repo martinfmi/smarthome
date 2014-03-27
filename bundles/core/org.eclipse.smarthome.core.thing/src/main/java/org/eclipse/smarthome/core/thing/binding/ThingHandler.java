@@ -37,4 +37,5 @@ public interface ThingHandler<C extends ThingConfiguration> {
     ThingHandler<?> getBridgeHandler();
 
     void setBridgeHandler(ThingHandler<?> bridgeHandler);
+
 }

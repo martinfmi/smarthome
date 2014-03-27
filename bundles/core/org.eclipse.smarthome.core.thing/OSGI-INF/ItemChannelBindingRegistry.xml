@@ -13,5 +13,5 @@
    <service>
       <provide interface="org.eclipse.smarthome.core.thing.ItemChannelBindingRegistry"/>
    </service>
-   <reference bind="setThingRegistry" cardinality="1..1" interface="org.eclipse.smarthome.core.thing.ThingRegistry" name="ItemRegistry" policy="static" unbind="unsetsetThingRegistry"/>
+   <reference bind="setThingRegistry" cardinality="1..1" interface="org.eclipse.smarthome.core.thing.ThingRegistry" name="ItemRegistry" policy="static" unbind="unsetThingRegistry"/>
 </scr:component>

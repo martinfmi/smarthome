@@ -1,5 +1,6 @@
 package org.eclipse.smarthome.core.thing.binding.builder;
 
+import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.binding.ThingConfiguration;
@@ -22,6 +23,11 @@ public class GenericThingBuilder<T extends GenericThingBuilder<T>> {
     
     public T withConfiguration(ThingConfiguration thingConfiguration) {
         this.thing.setConfiguration(thingConfiguration);
+        return self();
+    }
+
+    public T withBridge(Bridge bridge) {
+        this.thing.setBridge(bridge);
         return self();
     }
 

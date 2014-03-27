@@ -81,6 +81,22 @@ public class ThingRegistry {
         }
     }
 
+    public Thing getById(String id) {
+        for (Thing thing : things) {
+            if (thing.getId().equals(id)) {
+                return thing;
+            }
+        }
+        return null;
+    }
+
+    public void removeThing(String id) {
+        Thing thing = getById(id);
+        if (thing != null) {
+            removeThing(thing);
+        }
+    }
+
     public List<Thing> getThings() {
         return things;
     }

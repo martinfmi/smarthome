@@ -24,6 +24,11 @@ public abstract class BaseThingHandlerFactory<H extends ThingHandler<C>, C exten
     }
 
     protected void deactivate(ComponentContext componentContext) {
+        for (ServiceRegistration<?> serviceRegistration : this.thingHandlers.values()) {
+            @SuppressWarnings("unchecked")
+            H thingHandler = (H) bundleContext.getService(serviceRegistration.getReference());
+            ((BaseThingHandler<?>) thingHandler).dispose();
+        }
         this.bundleContext = null;
     }
 
@@ -32,6 +37,7 @@ public abstract class BaseThingHandlerFactory<H extends ThingHandler<C>, C exten
     public void deleted(String pid) {
         ServiceRegistration serviceRegistration = thingHandlers.get(pid);
         H thingHandler = (H) bundleContext.getService(serviceRegistration.getReference());
+        ((BaseThingHandler<?>) thingHandler).dispose();
         removeThingHandler(thingHandler);
         serviceRegistration.unregister();
     }
