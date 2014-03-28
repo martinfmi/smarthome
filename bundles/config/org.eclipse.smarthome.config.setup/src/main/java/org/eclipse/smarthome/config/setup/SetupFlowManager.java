@@ -5,6 +5,6 @@ import org.eclipse.smarthome.config.setup.flow.SetupFlow;
 
 public interface SetupFlowManager {
 
-    SetupFlow getSetupFlow(String stereotype);
+    SetupFlow getSetupFlow(String thingType);
 
 }

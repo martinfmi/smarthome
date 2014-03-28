@@ -1,41 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:setup-flow="http://eclipse.org/smarthome/schemas/config/setup-flow/v0.0.1"
-		xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		targetNamespace="http://eclipse.org/smarthome/schemas/config/setup-flow/v0.0.1">
-
+<xs:schema xmlns:setup-flow="http://eclipse.org/smarthome/schemas/config/setup-flow/v0.0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://eclipse.org/smarthome/schemas/config/setup-flow/v0.0.1">
 	<!-- 'setup-flows' root type definition -->
 	<xs:element name="setup-flows">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="setup-flow" type="setup-flow:setupFlow" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
-			<xs:attribute name="version" type="setup-flow:version" use="required"/>
 		</xs:complexType>
 	</xs:element>
-
-	<!-- 'version' type definition -->
-	<xs:simpleType name="version">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="0.0.1"/>
-		</xs:restriction>
-	</xs:simpleType>
-
+	<!-- 'setup-flow' root type definition -->
+	<xs:element name="setup-flow" type="setup-flow:setupFlow"/>
 	<!-- 'setup-flow' type definition -->
 	<xs:complexType name="setupFlow">
 		<xs:sequence>
-			<xs:element name="stereotypes" type="setup-flow:setupStereotypes"/>
+			<xs:element name="thing-types" type="setup-flow:thingTypes"/>
 			<xs:element name="steps" type="setup-flow:setupSteps"/>
 		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="bindingId" type="xs:string" use="required"/>
 	</xs:complexType>
-
-	<!-- 'stereotypes' type definition -->
-	<xs:complexType name="setupStereotypes">
+	<!-- 'thing-types' type definition -->
+	<xs:complexType name="thingTypes">
 		<xs:sequence>
-			<xs:element name="stereotype" type="setup-flow:setupStereotype" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="thing-type" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-
 	<!-- 'steps' type definition -->
 	<xs:complexType name="setupSteps">
 		<xs:choice minOccurs="1" maxOccurs="unbounded">
@@ -44,17 +33,10 @@
 			<xs:element name="configuration-step" type="setup-flow:configurationStep"/>
 		</xs:choice>
 	</xs:complexType>
-
-	<!-- 'stereotype' type definition -->
-	<xs:complexType name="setupStereotype">
-		<xs:attribute name="name" type="xs:string" use="required"/>
-	</xs:complexType>
-
 	<!-- 'step' base-type definition -->
 	<xs:complexType name="setupStep">
 		<xs:attribute name="id" type="xs:string" use="required"/>
 	</xs:complexType>
-
 	<!-- 'search-step' type definition -->
 	<xs:complexType name="searchStep">
 		<xs:complexContent>
@@ -65,7 +47,6 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-
 	<!-- 'external-event-step' type definition -->
 	<xs:complexType name="externalEventStep">
 		<xs:complexContent>
@@ -76,7 +57,6 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-
 	<!-- 'configuration-step' type definition -->
 	<xs:complexType name="configurationStep">
 		<xs:complexContent>
@@ -87,19 +67,12 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-
 	<!-- 'properties' type definition -->
 	<xs:complexType name="properties">
 		<xs:sequence>
-			<xs:element name="property" type="setup-flow:property" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-
-	<!-- 'property' type definition -->
-	<xs:complexType name="property">
-		<xs:attribute name="name" type="xs:string" use="required"/>
-	</xs:complexType>
-
 	<!-- 'timeout' type definition -->
 	<xs:simpleType name="timeout">
 		<xs:restriction base="xs:integer">
