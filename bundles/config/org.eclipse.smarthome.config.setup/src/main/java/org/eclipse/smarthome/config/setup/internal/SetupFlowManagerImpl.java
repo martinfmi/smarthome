@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.smarthome.config.setup.SetupFlowManager;
+import org.eclipse.smarthome.config.setup.SetupStepHandlerId;
+import org.eclipse.smarthome.config.setup.SetupStepProcess;
 import org.eclipse.smarthome.config.setup.flow.SetupFlow;
+import org.eclipse.smarthome.config.setup.handler.SetupStepHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,6 +77,25 @@ public class SetupFlowManagerImpl implements SetupFlowManager {
             }
         }
 
+        return null;
+    }
+
+    @Override
+    public boolean registerSetupStepHandler(SetupStepHandlerId stepHandlerId,
+            SetupStepHandler stepHandler) {
+
+        return false;
+    }
+
+    @Override
+    public boolean unregisterSetupStepHandler(SetupStepHandlerId stepHandlerId,
+            SetupStepHandler stepHandler) {
+
+        return false;
+    }
+
+    @Override
+    public SetupStepProcess getSetupStepProcess(SetupStepHandlerId stepHandlerId) {
         return null;
     }
 
