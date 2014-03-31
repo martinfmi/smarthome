@@ -8,11 +8,11 @@ public interface SetupFlowManager {
 
     SetupFlow getSetupFlow(String thingType);
 
-    boolean registerSetupStepHandler(
-            SetupStepHandlerId stepHandlerId, SetupStepHandler stepHandler);
+    boolean registerSetupStepHandler(SetupStepHandlerId stepHandlerId, SetupStepHandler stepHandler)
+            throws IllegalArgumentException;
 
-    boolean unregisterSetupStepHandler(
-            SetupStepHandlerId stepHandlerId, SetupStepHandler stepHandler);
+    boolean unregisterSetupStepHandler(SetupStepHandlerId stepHandlerId)
+            throws IllegalArgumentException;
 
     SetupStepProcess getSetupStepProcess(SetupStepHandlerId stepHandlerId);
 
