@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<setup-flow:setup-flow id="flow-hue" bindingId="hue"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:setup-flow="http://eclipse.org/smarthome/schemas/config/setup-flow/v0.0.1"
+        xsi:schemaLocation="http://eclipse.org/smarthome/schemas/config/setup-flow/v0.0.1 org.eclipse.smarthome.config.setup.schema.xsd">
+
+    <thing-types>
+        <thing-type>HueGateway</thing-type>
+    </thing-types>
+
+    <steps>
+        <search-step id="upnpSearch">
+            <timeout>60</timeout>
+        </search-step>
+
+        <configuration-step id="ipConfiguration">
+            <properties>
+                <property name="ip" />
+            </properties>
+        </configuration-step>
+
+        <configuration-step id="secretConfiguration">
+            <properties>
+                <property name="secret" />
+            </properties>
+        </configuration-step>
+
+        <external-event-step id="pairing">
+            <timeout>180</timeout>
+        </external-event-step>
+    </steps>
+
+</setup-flow:setup-flow>

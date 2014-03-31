@@ -66,7 +66,7 @@ public class SetupFlowManagerImpl implements SetupFlowManager {
     }
 
     @Override
-    public synchronized SetupFlow getSetupFlow(String thingType) throws IllegalStateException {
+    public final synchronized SetupFlow getSetupFlow(String thingType) throws IllegalStateException {
         assertServiceValid();
 
         for (SetupFlowProvider setupFlowProvider : this.setupFlowProviders) {
@@ -81,21 +81,21 @@ public class SetupFlowManagerImpl implements SetupFlowManager {
     }
 
     @Override
-    public boolean registerSetupStepHandler(SetupStepHandlerId stepHandlerId,
+    public final boolean registerSetupStepHandler(SetupStepHandlerId stepHandlerId,
             SetupStepHandler stepHandler) {
 
         return false;
     }
 
     @Override
-    public boolean unregisterSetupStepHandler(SetupStepHandlerId stepHandlerId,
+    public final boolean unregisterSetupStepHandler(SetupStepHandlerId stepHandlerId,
             SetupStepHandler stepHandler) {
 
         return false;
     }
 
     @Override
-    public SetupStepProcess getSetupStepProcess(SetupStepHandlerId stepHandlerId) {
+    public final SetupStepProcess getSetupStepProcess(SetupStepHandlerId stepHandlerId) {
         return null;
     }
 

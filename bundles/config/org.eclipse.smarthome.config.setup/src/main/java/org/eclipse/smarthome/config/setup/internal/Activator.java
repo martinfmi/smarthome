@@ -1,6 +1,7 @@
 package org.eclipse.smarthome.config.setup.internal;
 
 import org.eclipse.smarthome.config.setup.SetupFlowManager;
+import org.eclipse.smarthome.config.setup.SetupStepHandlerId;
 import org.eclipse.smarthome.config.setup.flow.SetupFlows;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -19,20 +20,29 @@ public class Activator implements BundleActivator {
 
 
     @Override
-    public void start(BundleContext context) throws Exception {
-        XMLTypeParser<SetupFlows> setupFlowParser = new XMLTypeParser<>(
+    public final void start(BundleContext context) throws Exception {
+        SetupStepHandlerId id = new SetupStepHandlerId("flow", "binding", "step", "thing");
+        System.out.println(id.toURI());
+        XMLTypeParser setupFlowParser = new XMLTypeParser(
                 context.getBundle().getResource(SETUP_FLOW_XSD_FILE), SetupFlows.class);
 
-        this.setupFlowTracker = new DeclarativeSetupFlowTracker(context, setupFlowParser);
-
         this.setupFlowManager = new SetupFlowManagerImpl();
+
+        this.setupFlowTracker = new DeclarativeSetupFlowTracker(
+                context, setupFlowParser, this.setupFlowManager);
+
+        this.setupFlowTracker.open();
+
         this.setupFlowManagerReg = context.registerService(
                 SetupFlowManager.class.getName(), this.setupFlowManager, null);
     }
 
     @Override
-    public void stop(BundleContext context) throws Exception {
+    public final void stop(BundleContext context) throws Exception {
         this.setupFlowManagerReg.unregister();
+
+        this.setupFlowTracker.close();
+
         this.setupFlowManager.release();
     }
 

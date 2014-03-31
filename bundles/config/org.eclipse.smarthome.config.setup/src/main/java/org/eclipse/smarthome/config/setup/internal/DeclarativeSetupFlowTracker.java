@@ -2,7 +2,10 @@ package org.eclipse.smarthome.config.setup.internal;
 
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.eclipse.smarthome.config.setup.flow.SetupFlow;
 import org.eclipse.smarthome.config.setup.flow.SetupFlows;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -16,13 +19,16 @@ public class DeclarativeSetupFlowTracker extends BundleTracker {
 
     private Logger logger = LoggerFactory.getLogger(DeclarativeSetupFlowTracker.class);
 
-    private static final String DIRECTORY_ESH_SETUP_FLOW = "ESH-INF/setup";
+    private static final String DIRECTORY_ESH_SETUP_FLOW = "/ESH-INF/setup/";
 
-    private XMLTypeParser<SetupFlows> setupFlowParser;
+    private XMLTypeParser setupFlowParser;
+
+    private SetupFlowManagerImpl setupFlowManager;
+    private Map<Bundle, SetupFlowProvider> setupFlowProviderMap;
 
 
-    public DeclarativeSetupFlowTracker(
-            BundleContext bundleContext, XMLTypeParser<SetupFlows> setupFlowParser) {
+    public DeclarativeSetupFlowTracker(BundleContext bundleContext,
+            XMLTypeParser setupFlowParser, SetupFlowManagerImpl setupFlowManager) {
 
         super(bundleContext, Bundle.ACTIVE, null);
 
@@ -32,61 +38,124 @@ public class DeclarativeSetupFlowTracker extends BundleTracker {
         if (setupFlowParser == null) {
             throw new IllegalArgumentException("The setup flow parser must not be null!");
         }
+        if (setupFlowManager == null) {
+            throw new IllegalArgumentException("The SetupFlowManager must not be null!");
+        }
 
         this.setupFlowParser = setupFlowParser;
-   }
+        this.setupFlowManager = setupFlowManager;
+
+        this.setupFlowProviderMap = new HashMap<>();
+    }
 
     @Override
-    public synchronized Bundle addingBundle(Bundle bundle, BundleEvent event) {
+    public final synchronized void open() {
+        super.open();
+    }
+
+    @Override
+    public final synchronized void close() {
+        super.close();
+
+        this.setupFlowProviderMap.clear();
+    }
+
+    private SetupFlowProvider acquireSetupFlowProvider(Bundle bundle) {
+        if (bundle != null) {
+            SetupFlowProvider setupFlowProvider = this.setupFlowProviderMap.get(bundle);
+
+            if (setupFlowProvider == null) {
+                setupFlowProvider = new SetupFlowProvider(bundle.getSymbolicName());
+                this.setupFlowProviderMap.put(bundle, setupFlowProvider);
+
+                this.setupFlowManager.addSetupFlowProvider(setupFlowProvider);
+            }
+
+            return setupFlowProvider;
+        }
+
+        return null;
+    }
+
+    private void releaseSetupFlowProvider(Bundle bundle) {
+        if (bundle != null) {
+            SetupFlowProvider setupFlowProvider = this.setupFlowProviderMap.get(bundle);
+
+            if (setupFlowProvider != null) {
+                this.setupFlowManager.removeFlowProvider(setupFlowProvider);
+
+                this.setupFlowProviderMap.remove(bundle);
+            }
+        }
+System.out.println("releaseSetupFlowProvider... " + this.setupFlowProviderMap.toString());
+    }
+
+    private void addSetupFlow(Bundle bundle, SetupFlow setupFlow) {
+        SetupFlowProvider setupFlowProvider = acquireSetupFlowProvider(bundle);
+
+        if (setupFlowProvider != null) {
+            setupFlowProvider.addSetupFlow(setupFlow);
+        }
+System.out.println("addSetupFlow... " + this.setupFlowProviderMap.toString());
+    }
+
+    private void addSetupFlow(Bundle bundle, SetupFlows setupFlows) {
+        SetupFlowProvider setupFlowProvider = acquireSetupFlowProvider(bundle);
+
+        if (setupFlowProvider != null) {
+            setupFlowProvider.addSetupFlows(setupFlows);
+        }
+System.out.println("addSetupFlow... " + this.setupFlowProviderMap.toString());
+    }
+
+    @Override
+    public final synchronized Bundle addingBundle(Bundle bundle, BundleEvent event) {
         Enumeration<String> setupFlowPaths = bundle.getEntryPaths(DIRECTORY_ESH_SETUP_FLOW);
 
         if (setupFlowPaths != null) {
+            int numberOfParsedSetupFlows = 0;
+
             while (setupFlowPaths.hasMoreElements()) {
                 String setupFlowPath = setupFlowPaths.nextElement();
                 URL setupFlowURL = bundle.getEntry(setupFlowPath);
-System.out.println(setupFlowURL);
+                String setupFlowFile = setupFlowURL.getFile();
+System.out.println(setupFlowFile);
 
                 try {
-                    SetupFlows setupFlows = this.setupFlowParser.parse(setupFlowURL);
-                } catch (Exception ex) {
-                    this.logger.error("The 'QiviconManifest.xml' for bundle '" + bundle.getSymbolicName()
-                      + "' could not be parsed successfully: " + ex.getMessage(), ex);
+                    this.logger.debug("Parsing the setup flow definition file '{}' in bundle '{}'...",
+                            setupFlowFile, bundle.getSymbolicName());
 
-          return null;
+//                    SetupFlows setupFlows = this.setupFlowParser.parse(setupFlowURL);
+                    Object setupFlowObj = this.setupFlowParser.parse(setupFlowURL);
+System.out.println(setupFlowObj);
+                    if (setupFlowObj instanceof SetupFlows) {
+                        addSetupFlow(bundle, (SetupFlows) setupFlowObj);
+                    } else {
+                        addSetupFlow(bundle, (SetupFlow) setupFlowObj);
+                    }
+
+                    numberOfParsedSetupFlows++;
+                } catch (Exception ex) {
+                    this.logger.error("The file '" + setupFlowFile + "' in bundle '"
+                            + bundle.getSymbolicName() + "' does not contain a valid setup flow!",
+                            ex);
                 }
+            }
+
+            if (numberOfParsedSetupFlows > 0) {
+                return bundle;
             }
         }
 
         return null;
-//        URL qiviconManifestUrl = bundle.getEntryPaths(Resource(QIVICON_MANIFEST_XML);
-
-//        if (qiviconManifestUrl != null) {
-//            if (!this.manifestRegistry.containsManifest(bundle)) {
-//                QiviconManifest manifest = null;
-//                try {
-//                    manifest = this.manifestParser.parse(qiviconManifestUrl);
-//
-//                    Logger.debug("The 'QiviconManifest.xml' for bundle '" + bundle.getSymbolicName()
-//                            + "' has been parsed successfully.");
-//                } catch (Exception ex) {
-//                    Logger.error("The 'QiviconManifest.xml' for bundle '" + bundle.getSymbolicName()
-//                            + "' could not be parsed successfully: " + ex.getMessage(), ex);
-//
-//                    return null;
-//                }
-//
-//                this.manifestRegistry.addManifest(bundle, manifest);
-//            }
-//
-//            return bundle;
-//        }
     }
 
     @Override
-    public synchronized void removedBundle(Bundle bundle, BundleEvent event, Object object) {
-        if ((event == null) || (event.getType() == BundleEvent.UNRESOLVED)) {
-            // unregister provider
-        }
+    public final synchronized void removedBundle(Bundle bundle, BundleEvent event, Object object) {
+        this.logger.debug("Unregistering the setup flow definition(s) for bundle '{}'...",
+                bundle.getSymbolicName());
+
+        releaseSetupFlowProvider(bundle);
     }
 
 }

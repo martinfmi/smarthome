@@ -11,5 +11,6 @@ Import-Package: org.apache.commons.io,
  org.osgi.util.tracker,
  org.slf4j
 Export-Package: org.eclipse.smarthome.config.setup,
- org.eclipse.smarthome.config.setup.flow
+ org.eclipse.smarthome.config.setup.flow,
+ org.eclipse.smarthome.config.setup.handler
 Bundle-Activator: org.eclipse.smarthome.config.setup.internal.Activator

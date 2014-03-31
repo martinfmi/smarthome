@@ -70,8 +70,12 @@
 	<!-- 'properties' type definition -->
 	<xs:complexType name="properties">
 		<xs:sequence>
-			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="property" type="setup-flow:property" minOccurs="1" maxOccurs="unbounded"/>
 		</xs:sequence>
+	</xs:complexType>
+	<!-- 'property' type definition -->
+	<xs:complexType name="property">
+		<xs:attribute name="name" type="xs:string" use="required"/>
 	</xs:complexType>
 	<!-- 'timeout' type definition -->
 	<xs:simpleType name="timeout">
