@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+<head>
+<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>HUE Bridge Discovery</title>
+<script src="/system/web/js/jquery/jquery.min.js"></script>
+</head>
+<body>
+	<form action="/hue/discover" method="post">
+		<input type="submit" value="Discover HUE Bridge" />
+	</form>
+	<p id="message"></p>
+	<script type="text/javascript">
+		$('form').on('submit', function(event) {
+			event.preventDefault();
+			$.ajax('/hue/discover', {
+				type: 'POST',
+				success: function(data) {
+					$('#message').html("Configured HUE Bridge with IP: " + data.ip);
+				}
+			});
+		})
+	</script>
+</body>
