@@ -17,6 +17,7 @@
 
   <modules>
     <module>org.eclipse.smarthome.config.core</module>
+    <module>org.eclipse.smarthome.config.setup</module>
   </modules>
 
 </project>

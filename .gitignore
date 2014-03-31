@@ -9,3 +9,4 @@ bin/
 
 distribution/smarthome/logs/*.log
 distribution/smarthome/*.zip
+/bundles/config/org.eclipse.smarthome.config.setup/src/gen

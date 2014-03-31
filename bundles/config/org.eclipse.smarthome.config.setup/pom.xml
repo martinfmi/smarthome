@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <groupId>org.eclipse.smarthome.bundles</groupId>
+    <artifactId>config</artifactId>
+    <version>0.7.0-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <bundle.symbolicName>org.eclipse.smarthome.config.setup</bundle.symbolicName>
+    <bundle.namespace>org.eclipse.smarthome.config.setup</bundle.namespace>
+  </properties>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eclipse.smarthome.config</groupId>
+  <artifactId>org.eclipse.smarthome.config.setup</artifactId>
+
+  <name>Eclipse SmartHome Configuration Setup</name>
+
+  <packaging>eclipse-plugin</packaging>
+
+  <build>
+      <plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- The schema directory or xsd files. -->
+					<schemaDirectory>${basedir}</schemaDirectory>
+					<!-- The package in which the source files will be generated. -->
+					<packageName>org.eclipse.smarthome.config.setup.flow</packageName>
+					<!-- The working directory to create the generated java source files. -->
+					<outputDirectory>${basedir}/src/gen/java</outputDirectory>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<forceRegenerate>true</forceRegenerate>
+					<removeOldOutput>true</removeOldOutput>
+
+					<!-- The name of your generated source package -->
+					<arguments>-extension</arguments>
+				</configuration>
+			</plugin>      
+      </plugins>
+  </build>
+
+</project>

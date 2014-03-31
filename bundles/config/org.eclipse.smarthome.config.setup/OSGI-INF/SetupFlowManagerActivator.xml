@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0"
+	name="org.eclipse.smarthome.config.setup.SetupFlowManager" immediate="true">
+
+	<implementation
+		class="org.eclipse.smarthome.config.setup.internal.SetupFlowManagerImpl"
+		deactivate="release" />
+
+	<service>
+		<provide interface="org.eclipse.smarthome.config.setup.SetupFlowManager" />
+	</service>
+
+	<reference interface="org.eclipse.smarthome.config.setup.SetupFlowProvider"
+		name="SETUP_FLOW_PROVIDER" policy="dynamic" cardinality="0..n"
+		bind="addSetupFlowProvider" unbind="removeSetupFlowProvider" />
+
+</scr:component>
